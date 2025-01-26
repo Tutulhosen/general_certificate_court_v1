@@ -1,0 +1,49 @@
+.flex-column-fluid {    
+   background-color: #f4ffe6;
+}
+
+.aside-menu {
+   background-color: #ffffff;
+}
+
+.aside-menu .menu-nav>.menu-item.menu-item-open>.menu-link {
+   background-color: #d0efa8;
+}
+.aside-menu .menu-nav>.menu-item.menu-item-active>.menu-link {
+   background-color: #d0efa8;
+}
+.aside-menu .menu-nav>.menu-item:not(.menu-item-parent):not(.menu-item-open):not(.menu-item-here):not(.menu-item-active):hover>.menu-link {
+   background-color: #d0efa8;
+}   
+/*.header-menu .menu-nav > .menu-item .menu-submenu > .menu-subnav > .menu-item.menu-item-active > .menu-link {
+   background-color: #8dc641;
+   }*/
+
+   @media (min-width: 992px){
+      .brand {
+         background-color: #683091;
+      }
+      .header {
+         background-color: #683091;
+      }
+      .brand .btn .svg-icon svg g [fill] {
+         fill: #ffffff;
+      }
+   }
+
+   @media (max-width: 991.98px){
+      .header-mobile {
+         background-color: #683091;         
+      }      
+
+      .header-mobile .burger-icon span {
+         background-color: #ffffff;
+      }         
+      .header-mobile .btn .svg-icon svg g [fill] {
+         fill: #ffffff;
+      }
+   }
+
+
+
+

@@ -1,0 +1,53 @@
+.header-fixed.subheader-fixed.subheader-enabled .wrapper {
+    padding: 65px;
+}
+
+@font-face {
+    font-family: 'Kalpurush';
+    src: url('../fonts/Kalpurush.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Nikosh';
+    src: url('../fonts/Nikosh.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body,
+html {
+    font-family: 'Kalpurush', Poppins, Helvetica, sans-serif;
+}
+
+::-webkit-input-placeholder {
+    font-size: 25px !important;
+}
+
+ :-moz-placeholder {
+    /* Firefox 18- */
+    font-size: 25px !important;
+}
+
+ ::-moz-placeholder {
+    /* Firefox 19+ */
+    font-size: 25px !important;
+}
+
+
+/* Overriding styles */
+
+ ::-webkit-input-placeholder {
+    font-size: 13px!important;
+}
+
+ :-moz-placeholder {
+    /* Firefox 18- */
+    font-size: 13px!important;
+}
+
+ ::-moz-placeholder {
+    /* Firefox 19+ */
+    font-size: 13px!important;
+}

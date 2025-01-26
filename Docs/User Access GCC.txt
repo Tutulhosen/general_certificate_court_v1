@@ -1,0 +1,54 @@
+v1:
+-----------
+GCO(district)(27)*
+Email: gco.dhaka@gmail.com
+Pass: 12345678
+
+Asst GCO(district)(28)*
+Email: asst.gco.dhaka@gmail.com
+Pass: 12345678
+
+GCO(upazilla)(27)
+Email: gco.mirpur.dhaka@gmail.com
+Pass: 12345678
+
+Asst GCO(upazilla)(28)
+Email: asst.gco.mirpur.dhaka@gmail.com
+Pass: 12345678
+
+Divisional Commissioner (34)
+Email: divcomdhaka@mopa.gov.bd
+Pass: 12345678
+
+District Commissioner (6)
+Email: dcdhaka@mopa.gov.bd
+Pass: 12345678
+
+District Commissioner (doptor) (6)
+User: 100000006515
+Pass: 02522016
+
+LAB Chairman (25)
+Email: chairman@lab.gov.bd
+Pass: 12345678
+
+LAB Chairman Asst
+Email: office.asst@lab.gov.bd
+Pass: 12345678
+
+Sub Register Mirpur (32)
+Email: subregister@minlaw.gov.bd
+Pass: 12345678
+
+Officer Incharge Poilce (mirpur) (33)
+Email: oc.mirpur@police.gov.bd
+Pass: 12345678
+
+Organization (mirpur)* (35)
+Email: agm.mirpur@sonalibank.com.bd
+Pass: 12345678
+
+
+
+
+

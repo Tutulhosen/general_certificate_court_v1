@@ -1,0 +1,510 @@
+@php
+   $user = Auth::user();
+   $roleID = Auth::user()->role_id;
+   $badi='ধারকের বিবরণ';
+   $bibadi='খাতকের বিবরণ';
+   switch ($appeal->applicant_type) {
+        case 'BANK':
+            $org_type = 'ব্যাংক';
+            break;
+        case 'GOVERNMENT':
+            $org_type = 'সরকারি প্রতিষ্ঠান';
+            break;
+        case 'OTHER_COMPANY':
+            $org_type = 'স্বায়ত্তশাসিত প্রতিষ্ঠান';
+            break;
+    }
+@endphp
+
+@extends('layouts.default')
+
+@section('content')
+
+<style type="text/css">
+   .tg {border-collapse:collapse;border-spacing:0;width: 100%;}
+   .tg td{border-color:black;border-style:solid;border-width:1px;font-size:14px;overflow:hidden;padding:6px 5px;word-break:normal;}
+   .tg th{border-color:black;border-style:solid;border-width:1px;font-size:14px;font-weight:normal;overflow:hidden;padding:6px 5px;word-break:normal;}
+   .tg .tg-nluh{background-color:#dae8fc;border-color:#cbcefb;text-align:left;vertical-align:top}
+   .tg .tg-19u4{background-color:#ecf4ff;border-color:#cbcefb;font-weight:bold;text-align:right;vertical-align:top}
+</style>
+
+<!--begin::Card-->
+<div class="card card-custom">
+   <div class="card-header flex-wrap py-5">
+      {{-- <div class="card-title"> --}}
+          <div class="container">
+              <div class="row">
+                  <div class="col-10"><h3 class="card-title h2 font-weight-bolder">{{ $page_title }}</h3></div>
+                  {{-- <div class="col-8">fdsafsad</div> --}}
+                  {{-- <div class="col-2"><a href="{{ route('messages_group') }}" class="btn btn-primary float-right">Message</a></div> --}}
+                
+              </div>
+          </div>
+         {{-- <h3 class="card-title h2 font-weight-bolder">{{ $page_title }}</h3>
+
+         <table>
+             <tr align="right">
+                 <th>
+                     <a  href="" class="btn btn-primary float-right">Message</a>
+
+                 </th>
+             </tr>
+         </table> --}}
+      {{-- </div> --}}
+      @if ($roleID == 5 || $roleID == 7 || $roleID == 8)
+      <div class="card-toolbar">
+         <a href="{{ route('case.edit', $appeal->id) }}" class="btn btn-sm btn-primary font-weight-bolder">
+            <i class="la la-edit"></i>মামলা সংশোধন করুন
+         </a>
+         <!-- &nbsp;
+         <a href="{{ url('case/create') }}" class="btn btn-sm btn-primary font-weight-bolder">
+            <i class="la la-plus"></i>পুরাতন চলমান মামলা এন্ট্রি
+         </a>   -->
+      </div>
+      @endif
+   </div>
+   <div class="card-body">
+      @if ($message = Session::get('success'))
+      <div class="alert alert-success">
+         {{ $message }}
+      </div>
+      @endif
+      
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table table-striped border">
+                <thead>
+                    <th class="h3" scope="col" colspan="2">সাধারণ তথ্য</th>
+                </thead>
+               <tbody>
+                   <tr>
+                     <th scope="row">দাবিকৃত অর্থের পরিমাণ (আসল)</th>
+                     <td >{{ en2bn($appeal->running_case_required_amount) ?? '-'}} টাকা</td>
+                  </tr>
+                  <tr>
+                     <th scope="row">দাবিকৃত অর্থের পরিমাণ (কথায়)</th>
+                     <td >{{ $appeal->running_case_required_amount_text ?? '-'}} টাকা</td>
+                  </tr>
+                  <tr>
+                     <th scope="row">মোট সুদের পরিমাণ</th>
+                     <td >{{ en2bn($appeal->running_case_interest) ?? '-'}} টাকা</td>
+                  </tr>
+                  <tr>
+                     <th scope="row">মোট সুদের পরিমাণ (কথায়)</th>
+                     <td >{{ $appeal->running_case_interest_text ?? '-'}} টাকা</td>
+                  </tr>
+                  <tr>
+                     <th scope="row">মোট অর্থের পরিমাণ (সুদসহ)</th>
+                     <td >{{ en2bn($appeal->running_case_total_amount) ?? '-'}} টাকা</td>
+                  </tr>
+                 <tr>
+                     <th scope="row">জেলা</th>
+                     <td >{{ $appeal->district_name ?? '-'}}</td>
+                  </tr>
+                  <tr>
+                     <th scope="row">উপজেলা</th>
+                     <td >{{ $appeal->upazila_name  ?? '-'}}</td>
+                  </tr>
+                  <tr>
+                     <th scope="row">প্রাতিষ্ঠানের নাম</th>
+                     <td >{{ $appeal->office_name ?? '-'}}</td>
+                  </tr>
+                  <tr>
+                     <th scope="row">প্রাতিষ্ঠানের ঠিকানা</th>
+                     <td >{{get_office_by_id($appeal->office_id)->organization_physical_address ?? '-' }}</td>
+                  </tr>
+                  <tr>
+                     <th scope="row">প্রাতিষ্ঠানের ধরণ</th>
+                     <td >{{ $org_type ?? '-'  ?? '-' }}</td>
+                  </tr>
+                  <tr>
+                     <th scope="row">প্রাতিষ্ঠানের আইডি (রাউটিং নং )</th>
+                     <td >{{ get_office_by_id($appeal->office_id)->organization_routing_id  ?? '-' }}</td>
+                  </tr>
+
+                   <tr>
+                     <th scope="row">মামলার ধারা</th>
+                     <td >{{ $appeal->law_section ?? '-'}}</td>
+                  </tr>
+                  <tr>
+                     <th scope="row">মামলা নং</th>
+                     <td >{{ en2bn($appeal->case_no) ?? '-'}}</td>
+                  </tr>
+                  <tr>
+                     <th scope="row">মামলা রুজুর তারিখ</th>
+                     <td >{{ en2bn($appeal->case_date) ?? '-'}}</td>
+                  </tr>
+                  
+                </tbody>
+            </table>
+            
+            <!-- @if(count($appeal->appealnotes)>0)
+            <table class="table table-striped border">            
+                <thead>
+                    <th class="h3" scope="col">রিকুইজিশন নোট </th>
+                </thead>
+                <tbody>
+                  
+                      @foreach ($appeal->appealnotes as $notes)
+                          <tr>
+                             <td>{{ $notes->order_text }}</td>
+                          </tr>
+                      @endforeach
+                  
+               </tbody>
+            </table>
+            @endif  -->
+            
+        </div>
+      <div class="col-md-6">
+        
+            <table class="table table-striped border">
+               <thead>
+                  <th class="h3" scope="col" colspan="7">{{ $badi }}</th>
+             </thead>
+               <thead>
+                  <tr style="text-align:center">
+                     <th scope="row" width="10">ক্রম</th>
+                     <th  scope="row" width="100">নাম</th>
+                     <th  scope="row" width="100">পিতা/স্বামীর নাম</th>
+                     <th  scope="row" >প্রতিষ্ঠান প্রতিনিধির আইডি</th>
+                  </tr>
+               </thead>
+               <tbody>
+              @php $k = 1; @endphp
+         @foreach ($applicantCitizen as $badi)
+            <tr style="text-align:center">
+               <td>{{en2bn($k)}}.</td>
+               <td>{{ $badi->citizen_name ?? '-' }}</td>
+               <td>{{ $badi->father ?? '-' }}</td>
+               <td>{{ $badi->organization_employee_id ?? '-' }}</td>
+            </tr>
+         @php $k++; @endphp
+         @endforeach
+               </tbody>
+            </table>
+
+            <br>
+            <table class="table table-striped border">
+               <thead>
+                    <th class="h3" scope="col" colspan="4">{{ $bibadi }}</th>
+               </thead>
+               <thead>
+                  <tr>
+                     <th scope="row" width="10">ক্রম</th>
+                     <th  scope="row" width="150">নাম</th>
+                     <th  scope="row" width="150">পিতা/স্বামীর নাম</th>
+                     <th  scope="row">বর্তমান ঠিকানা</th>
+                     <th  scope="row">স্থায়ী ঠিকানা</th>
+                  </tr>
+               </thead>
+               <tbody>
+            @php $k = 1; @endphp
+            
+                  <tr>
+                     <td>{{ en2bn($k) }}.</td>
+                     <td>{{ $defaulterCitizen->citizen_name ?? '-' }}</td>
+                     <td>{{ $defaulterCitizen->father ?? '-'  }}</td>
+                     <td>{{ $defaulterCitizen->present_address ?? '-'  }}</td>
+                     <td>{{ $defaulterCitizen->permanent_address ?? '-'  }}</td>
+                  </tr>
+             @php $k++; @endphp
+           
+               </tbody>
+            </table>
+            <br>
+            @if(count($nomineeCitizen)>0)
+            <table class="table table-striped border">
+               <thead>
+                    <th class="h3" scope="col" colspan="4">উত্তরাধিকারের বিবরণ</th>
+               </thead>
+               <thead>
+                  <tr>
+                     <th scope="row" width="10">ক্রম</th>
+                     <th  scope="row" width="200">নাম</th>
+                     <th  scope="row">পিতা/স্বামীর নাম</th>
+                     <th  scope="row">ঠিকানা</th>
+                  </tr>
+               </thead>
+               <tbody>
+              @php $k = 1; @endphp
+                @foreach ($nomineeCitizen as $nominee)
+                <tr>
+                   <td>{{en2bn($k)}}.</td>
+                   <td>{{ $nominee->citizen_name ?? '-' }}</td>
+                   <td>{{ $nominee->father ?? '-' }}</td>
+                   <td>{{ $nominee->present_address ?? '-' }}</td>
+                </tr>
+             @php $k++; @endphp
+             @endforeach
+               </tbody>
+            </table>
+            @endif
+            <br>
+      </div>
+     
+      
+
+      <div class="col-md-12">
+         <table class="table table-striped border">
+            <thead>
+                <th class="h3" scope="col" colspan="2">সংযুক্তি</th>
+            </thead>
+           <tbody>
+              <tr>
+                 <td>
+                    @forelse ($attachmentList as $key => $row)
+                          <div class="form-group mb-2" id="deleteFile{{ $row->id }}">
+                              <div class="input-group">
+                                  <div class="input-group-prepend">
+                                      <button class="btn bg-success-o-75" type="button">{{ en2bn(++$key) . ' - নম্বর :' }}</button>
+                                  </div>
+                                  {{-- <input readonly type="text" class="form-control" value="{{ asset($row->file_path . $row->file_name) }}" /> --}}
+                                  <input readonly type="text" class="form-control" value="{{ $row->file_category ?? '' }}" />
+                                  <div class="input-group-append">
+                                      <a href="{{ asset($row->file_path . $row->file_name) }}" target="_blank" class="btn btn-sm btn-success font-size-h5 float-left">
+                                          <i class="fa fas fa-file-pdf"></i>
+                                          <b>দেখুন</b>
+                                          {{-- <embed src="{{ asset('uploads/sf_report/'.$data[0]['case_register'][0]['sf_report']) }}" type="application/pdf" width="100%" height="600px" />  --}}
+                                       </a>
+                                      {{-- <a href="minarkhan.com" class="btn btn-success" type="button">দেখুন </a> --}}
+                                  </div>
+                                  <!-- <div class="input-group-append">
+                                      <a href="javascript:void(0);" id="" onclick="deleteFile({{ $row->id }} )" class="btn btn-danger">
+                                          <i class="fas fa-trash-alt"></i>
+                                          <b>মুছুন</b>
+                                      </a>
+                                  </div> -->
+                              </div>
+                          </div>
+                    @empty
+                      <div class="pt-5">
+                          <p class="text-center font-weight-normal font-size-lg">কোনো সংযুক্তি খুঁজে পাওয়া যায়নি</p>
+                      </div>
+                    @endforelse
+                 </td>
+              </tr>
+           </tbody>
+        </table> 
+        <table class="table table-striped border">
+         <thead>
+             <th class="h3" scope="col" colspan="2">কোর্ট ফি সংযুক্তি</th>
+         </thead>
+        <tbody>
+           <tr>
+              <td>
+                 @if($appeal->running_case_court_fee_attached)
+
+                       <div class="form-group mb-2" id="deleteFile{{ $appeal->id }}">
+                           <div class="input-group">
+                               <div class="input-group-prepend">
+                                  
+                               </div>
+                               
+                               <input readonly type="text" class="form-control" value="কোর্ট ফি" />
+                               <div class="input-group-append">
+                                   <a href="{{ asset("running_case_court_fee_attached/" . $appeal->running_case_court_fee_attached) }}" target="_blank" class="btn btn-sm btn-success font-size-h5 float-left">
+                                       <i class="fa fas fa-file-pdf"></i>
+                                       <b>দেখুন</b>
+                                    </a>
+
+                               </div>
+                           
+                           </div>
+                       </div>
+                 @else
+                   <div class="pt-5">
+                       <p class="text-center font-weight-normal font-size-lg">কোনো সংযুক্তি খুঁজে পাওয়া যায়নি</p>
+                   </div>
+                 @endif
+              </td>
+           </tr>
+        </tbody>
+     </table> 
+        
+        @if($appeal->case_entry_type=='RUNNING')
+        <table class="table table-striped border">
+            <thead>
+                <th class="h3" scope="col" colspan="2">আদেশ নামা সংযুক্তি</th>
+            </thead>
+           <tbody>
+              <tr>
+                 <td>
+                    @if($runningcommandList)
+
+                          <div class="form-group mb-2" id="deleteFile{{ $runningcommandList->id }}">
+                              <div class="input-group">
+                                  <div class="input-group-prepend">
+                                     
+                                  </div>
+                                  
+                                  <input readonly type="text" class="form-control" value="{{ $runningcommandList->file_category ?? '' }}" />
+                                  <div class="input-group-append">
+                                      <a href="{{ asset($runningcommandList->file_path . $runningcommandList->file_name) }}" target="_blank" class="btn btn-sm btn-success font-size-h5 float-left">
+                                          <i class="fa fas fa-file-pdf"></i>
+                                          <b>দেখুন</b>
+                                       </a>
+
+                                  </div>
+                              
+                              </div>
+                          </div>
+                    @else
+                      <div class="pt-5">
+                          <p class="text-center font-weight-normal font-size-lg">কোনো সংযুক্তি খুঁজে পাওয়া যায়নি</p>
+                      </div>
+                    @endif
+                 </td>
+              </tr>
+           </tbody>
+        </table> 
+        @endif
+        
+        <table class="table table-striped border">
+            <thead>
+               <th class="h3" scope="col" colspan="2">আদেশের টেমপ্লেট সংযুক্তি</th>
+            </thead>
+            <tbody>
+               <tr>
+                  <td>
+                     @forelse ($runningorderTemplate as $key => $row)
+                           <div class="form-group mb-2" id="deleteFile{{ $row->id }}">
+                                 <div class="input-group">
+                                    <div class="input-group-prepend">
+                                       <button class="btn bg-success-o-75" type="button">{{ en2bn(++$key) . ' - নম্বর :' }}</button>
+                                    </div>
+                                    {{-- <input readonly type="text" class="form-control" value="{{ asset($row->file_path . $row->file_name) }}" /> --}}
+                                    <input readonly type="text" class="form-control" value="{{ $row->file_category ?? '' }}" />
+                                    <div class="input-group-append">
+                                       <a href="{{ asset($row->file_path . $row->file_name) }}" target="_blank" class="btn btn-sm btn-success font-size-h5 float-left">
+                                             <i class="fa fas fa-file-pdf"></i>
+                                             <b>দেখুন</b>
+                                             {{-- <embed src="{{ asset('uploads/sf_report/'.$data[0]['case_register'][0]['sf_report']) }}" type="application/pdf" width="100%" height="600px" />  --}}
+                                          </a>
+                                       {{-- <a href="minarkhan.com" class="btn btn-success" type="button">দেখুন </a> --}}
+                                    </div>
+                                    <!-- <div class="input-group-append">
+                                       <a href="javascript:void(0);" id="" onclick="deleteFile({{ $row->id }} )" class="btn btn-danger">
+                                             <i class="fas fa-trash-alt"></i>
+                                             <b>মুছুন</b>
+                                       </a>
+                                    </div> -->
+                                 </div>
+                           </div>
+                     @empty
+                        <div class="pt-5">
+                           <p class="text-center font-weight-normal font-size-lg">কোনো সংযুক্তি খুঁজে পাওয়া যায়নি</p>
+                        </div>
+                     @endforelse
+                  </td>
+               </tr>
+            </tbody>
+        </table> 
+
+      <table class="table table-striped border">
+         <thead>
+            <th class="h3" scope="col" colspan="2">হাজিরা সংযুক্তি</th>
+         </thead>
+         <tbody>
+            <tr>
+               <td>
+                  @if($hajira)
+
+                        <div class="form-group mb-2" id="deleteFile{{ $hajira->id }}">
+                              <div class="input-group">
+                                 <div class="input-group-prepend">
+                                    
+                                 </div>
+                                 
+                                 <input readonly type="text" class="form-control" value="{{ $hajira->file_category ?? '' }}" />
+                                 <div class="input-group-append">
+                                    <a href="{{ asset($hajira->file_path . $hajira->file_name) }}" target="_blank" class="btn btn-sm btn-success font-size-h5 float-left">
+                                          <i class="fa fas fa-file-pdf"></i>
+                                          <b>দেখুন</b>
+                                       </a>
+
+                                 </div>
+                              
+                              </div>
+                        </div>
+                  @else
+                     <div class="pt-5">
+                        <p class="text-center font-weight-normal font-size-lg">কোনো সংযুক্তি খুঁজে পাওয়া যায়নি</p>
+                     </div>
+                  @endif
+               </td>
+            </tr>
+         </tbody>
+      </table> 
+
+      <table class="table table-striped border">
+         <thead>
+            <th class="h3" scope="col" colspan="2">অন্যান্য সংযুক্তি</th>
+         </thead>
+         <tbody>
+            <tr>
+               <td>
+                  @forelse ($others as $key => $row)
+                        <div class="form-group mb-2" id="deleteFile{{ $row->id }}">
+                              <div class="input-group">
+                                 <div class="input-group-prepend">
+                                    <button class="btn bg-success-o-75" type="button">{{ en2bn(++$key) . ' - নম্বর :' }}</button>
+                                 </div>
+                                 {{-- <input readonly type="text" class="form-control" value="{{ asset($row->file_path . $row->file_name) }}" /> --}}
+                                 <input readonly type="text" class="form-control" value="{{ $row->file_category ?? '' }}" />
+                                 <div class="input-group-append">
+                                    <a href="{{ asset($row->file_path . $row->file_name) }}" target="_blank" class="btn btn-sm btn-success font-size-h5 float-left">
+                                          <i class="fa fas fa-file-pdf"></i>
+                                          <b>দেখুন</b>
+                                          {{-- <embed src="{{ asset('uploads/sf_report/'.$data[0]['case_register'][0]['sf_report']) }}" type="application/pdf" width="100%" height="600px" />  --}}
+                                       </a>
+                                    {{-- <a href="minarkhan.com" class="btn btn-success" type="button">দেখুন </a> --}}
+                                 </div>
+                                 <!-- <div class="input-group-append">
+                                    <a href="javascript:void(0);" id="" onclick="deleteFile({{ $row->id }} )" class="btn btn-danger">
+                                          <i class="fas fa-trash-alt"></i>
+                                          <b>মুছুন</b>
+                                    </a>
+                                 </div> -->
+                              </div>
+                        </div>
+                  @empty
+                     <div class="pt-5">
+                        <p class="text-center font-weight-normal font-size-lg">কোনো সংযুক্তি খুঁজে পাওয়া যায়নি</p>
+                     </div>
+                  @endforelse
+               </td>
+            </tr>
+         </tbody>
+      </table> 
+
+
+      </div>
+  
+    </div>
+    <br>
+   
+   <br>
+  
+
+   
+
+</div>
+<!--end::Card-->
+
+@endsection
+
+{{-- Includable CSS Related Page --}}
+@section('styles')
+<link href="{{ asset('plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css" />
+<!--end::Page Vendors Styles-->
+@endsection
+
+{{-- Scripts Section Related Page--}}
+@section('scripts')
+<script src="{{ asset('plugins/custom/datatables/datatables.bundle.js') }}"></script>
+<script src="{{ asset('js/pages/crud/datatables/advanced/multiple-controls.js') }}"></script>
+<!--end::Page Scripts-->
+@endsection
+
+
